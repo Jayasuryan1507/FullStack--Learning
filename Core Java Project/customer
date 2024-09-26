@@ -1,0 +1,57 @@
+package Project;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class customer {
+	int id;
+	String name;
+	String Password;
+	int unitconsumed;
+	boolean Billpaid;
+	double currentbill;
+
+	 boolean paymentstatus;
+
+	public customer(int id, String name, String password) {
+
+		this.id = id;
+		this.name = name;
+		Password = password;
+		unitconsumed = 0;
+		Billpaid = false;
+		currentbill = 0;
+
+	}
+
+	void displaybill(boolean Paymentstatus) {
+		System.out.println("\n Bill Payment:");
+		System.out.println("Customer Id:" + id);
+		System.out.println("Name:" + name);
+		System.out.println("Amount Paid" + currentbill);
+
+		System.out.println("Payment Status: " + (Paymentstatus ? "Paid" : "Not Paid"));
+
+	}
+
+	void displayPaymentDetails() {
+		System.out.println("\n Payment Detail:");
+		System.out.println("Customer Id:" + id);
+		System.out.println("Name:" + name);
+
+		System.out.println("Unit Consumed" + unitconsumed);
+		System.out.println("Bill amount" + currentbill);
+	}
+
+	void displayPaymentHistory() {
+		System.out.println("\n Payment History:");
+		System.out.println("Customer Id:" + id);
+		System.out.println("Name:" + name);
+		System.out.println("Unit Consumed:" + unitconsumed);
+		System.out.println("Bill amount" + currentbill);
+
+	}
+
+}
+
+
