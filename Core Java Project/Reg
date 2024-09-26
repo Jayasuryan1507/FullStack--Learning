@@ -1,0 +1,75 @@
+package Project;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class Reg {
+	public static void signup(Scanner sc, HashMap<Integer, customer> obj) {
+	    System.out.print("Enter a new Customer ID: ");
+	    int id = sc.nextInt();
+	    sc.nextLine(); 
+
+	    if (obj.containsKey(id)) {
+	        System.out.println("Customer ID already exists. Please try again.");
+	        return;
+	    }
+
+	    System.out.print("Enter your name: ");
+	    String name = sc.nextLine();
+
+	    String password;
+	    String reenteredPassword;
+	    while (true) {
+	        System.out.print("Enter a password: ");
+	        password = sc.nextLine();
+	        System.out.print("Re-enter your password: ");
+	        reenteredPassword = sc.nextLine();
+	        
+	        if (password.equals(reenteredPassword)) {
+	            break;
+	        } else {
+	            System.out.println("Passwords do not match. Please try again.");
+	        }
+	    }
+
+	    customer ob1 = new customer(id, name, password);
+	    obj.put(id, ob1);
+
+	    System.out.println("Sign up successful. You can now log in.");
+	}
+
+	 public static customer login(Scanner sc, HashMap<Integer, customer> obj) {
+		    System.out.print("Enter your Customer ID: ");
+		    int id = sc.nextInt();
+		    sc.nextLine(); 
+		    customer o = obj.get(id);
+
+		    if (o == null) {
+		        System.out.println("Customer ID not found. Please try again.");
+		        return null;
+		    }
+
+		    System.out.print("Enter your password: ");
+		    String password = sc.nextLine();
+		    if (o.Password.equals(password)) {
+		        System.out.println("Login successful.");
+		    } else {
+		        System.out.println("Incorrect password. Please try again.");
+		        System.out.print("Re-enter your password: ");
+		        String reenteredPassword = sc.nextLine();
+
+		        if (o.Password.equals(reenteredPassword)) {
+		            System.out.println("Login successful on the second attempt.");
+		        } else {
+		            System.out.println("Incorrect password again. Login failed.");
+		            return null;
+		        }
+		    }
+
+		    
+
+		    System.out.println("Login successful.");
+		    System.out.println("Welcome, " + o.name + "!");
+		    return o;
+		}
+}
