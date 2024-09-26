@@ -1,0 +1,79 @@
+package Project;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		HashMap<Integer, customer> obj = new HashMap<Integer, customer>();
+		obj.put(1507, new customer(1507, "Surya", "2817"));
+        obj.put(3108, new customer(3108, "Bala", "1507"));
+		bill ob = new bill();
+
+		while (true) {
+			System.out.println("\nWelcome to the Electricity Billing System");
+			System.out.println("1. Sign Up");
+			System.out.println("2. Log In");
+			System.out.println("3. Exit");
+			System.out.print("Choose an option: ");
+			int choice = sc.nextInt();
+		
+			if (choice == 1) {
+				Reg.signup(sc, obj);
+			} else if (choice == 2) {
+				customer o = Reg.login(sc, obj);
+
+				if (o == null) {
+					continue;
+				}
+
+				while (true) {
+					System.out.println("\nOptions:");
+					System.out.println("1. Pay Bill");
+					System.out.println("2. Exit");
+					System.out.print("Choose an option: ");
+					int option = sc.nextInt();
+				
+
+					if (option == 1) {
+						System.out.print("Enter the number of units consumed: ");
+						o.unitconsumed = sc.nextInt();
+			
+						bill b = new bill();
+						b.calculatebill(o);
+
+						System.out.println("\nBill Details:");
+						o.displayPaymentDetails();
+
+						System.out.println("Payment Method Options:");
+						System.out.println("1. Credit Card");
+						System.out.println("2. Debit Card");
+						System.out.println("3. GPay");
+						System.out.print("Choose a payment method: ");
+						int paymentMethod = sc.nextInt();
+		
+
+						ob.payBill(o, paymentMethod);
+						System.out.println("Thank you for your payment!");
+						System.exit(0);
+					} else if (option == 2) {
+						
+						System.out.println("Exiting...");
+						System.exit(0);
+					} else {
+						System.out.println("Invalid option. Please try again.");
+					}
+				}
+			} else if (choice == 3) {
+				System.out.println("Exiting...");
+				System.exit(0);
+			} else {
+				System.out.println("Invalid choice. Please try again.");
+			}
+		}
+	}
+
+}
