@@ -1,0 +1,188 @@
+package Project;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class bill {
+	double accountbalance = 1000;
+	double creditcardlimit = 20000;
+	private int generatedOtp;
+	Scanner sc = new Scanner(System.in);
+	Random random = new Random();
+	
+
+	 String ValidCardNum(String card) {
+	        while (true) {
+	        	System.out.print("Enter your card number: ");
+	            String cardnum = sc.nextLine();
+	            if (cardnum.length() != 12) {
+	                System.out.println("Invalid card number. Please enter a valid 12-digit card number.");
+	            } else {
+	                boolean isValid = true;
+	                for (int i = 0; i < 12; i++) {
+	                    if (!(cardnum.charAt(i) >= '0' && cardnum.charAt(i) <= '9')) {
+	                        isValid = false;
+	                    }
+	                }
+	                if (isValid) {
+	                    return cardnum;
+	                } else {
+	                    System.out.println("Invalid card number. Please enter a valid 12-digit card number.");
+	                }
+	            }
+	        }
+	    }
+
+	    String ValidCVV(String cvv) {
+	        while (true) {
+	        	System.out.print("Enter your cvv: ");
+	            String CVV = sc.nextLine();
+	            if (CVV.length() != 3) {
+	                System.out.println("Invalid CVV. Please enter a valid 3-digit CVV.");
+	            } else {
+	                boolean isValid = true;
+	                for (int i = 0; i < 3; i++) {
+	                    if (!(CVV.charAt(i) >= '0' && CVV.charAt(i) <= '9')) {
+	                        isValid = false;
+	                    }
+	                }
+	                if (isValid) {
+	                    return CVV;
+	                } else {
+	                    System.out.println("Invalid CVV. Please enter a valid 3-digit CVV.");
+	                }
+	            }
+	        }
+	    }
+
+	    String ValidPhoneNum(String phn) {
+	        while (true) {
+	        	System.out.print("Enter your phone number: ");
+	            String phonenum = sc.nextLine();
+	            if (phonenum.length() != 10) {
+	                System.out.println("Invalid phone number. Please enter a valid 10-digit phone number.");
+	            } else {
+	                boolean isValid = true;
+	                for (int i = 0; i < 10; i++) {
+	                    if (!(phonenum.charAt(i) >= '0' && phonenum.charAt(i) <= '9')) {
+	                        isValid = false;
+	                    }
+	                }
+	                if (isValid) {
+	                    return phonenum;
+	                } else {
+	                    System.out.println("Invalid phone number. Please enter a valid 10-digit phone number.");
+	                }
+	            }
+	        }
+	    }
+
+	
+
+void sendotp() {
+		generatedOtp = 100000 + random.nextInt(900000);
+		System.out.println("OTP has been sent to your registered mobile number:" + generatedOtp);
+	}
+
+	boolean verifyOtp(int userOtp) {
+		return userOtp == generatedOtp;
+	}
+
+	void calculatebill(customer c) {
+		double billamount = 0;
+		if (c.unitconsumed <= 100) {
+			billamount = c.unitconsumed * 1.5;
+		} else if (c.unitconsumed <= 300) {
+			billamount = 100 * 1.5 + (c.unitconsumed - 100) * 2.0;
+		} else {
+			billamount = 100 * 1.5 + 200 * 2.0 + (c.unitconsumed - 300) * 3.0;
+		}
+
+		billamount += 50;
+		c.currentbill = billamount;
+	}
+
+	void payBill(customer c1, int paymentMethod) {
+		if (c1.Billpaid) {
+			System.out.println("The bill has already been paid.");
+			return;
+		}
+		boolean paymentsuccess = false;
+		String cardnum;
+		String CVV;
+		String phonenum;
+		double billAmount = c1.currentbill;
+		switch (paymentMethod) {
+		case 1:
+			cardnum = ValidCardNum("Enter your credit card number (12 digits): ");
+	        CVV = ValidCVV("Enter your card CVV (3 digits): ");
+	        
+	        if (billAmount <= creditcardlimit) {
+	            sendotp();
+	            System.out.print("Enter OTP: ");
+	            int userOtp = sc.nextInt();
+	            
+	            
+	            if (verifyOtp(userOtp)) {
+	                paymentsuccess = true;
+	            } else {
+	                System.out.println("Invalid OTP. Payment declined.");
+	            }
+	        } else {
+	            System.out.println("Credit card limit exceeded. Payment declined.");
+	        }
+	        break;
+		case 2:
+			 cardnum = ValidCardNum("Enter your debit card number (12 digits): ");
+		        CVV = ValidCVV("Enter your card CVV (3 digits): ");
+		        phonenum = ValidPhoneNum("Enter your phone number: ");
+		        
+		        if (accountbalance >= billAmount) {
+		            sendotp();
+		            System.out.print("Enter OTP: ");
+		            int userOtp = sc.nextInt();
+		           
+		            
+		            if (verifyOtp(userOtp)) {
+		                paymentsuccess = true;
+		            } else {
+		                System.out.println("Invalid OTP. Payment declined.");
+		            }
+		        } else {
+		            System.out.println("Insufficient funds. Your account balance is $" + accountbalance);
+		        }
+		        break;
+
+
+		case 3:
+			phonenum = ValidPhoneNum("Enter your phone number: ");
+			sendotp();
+			System.out.print("Enter OTP: ");
+			int userOtpGPay = sc.nextInt();
+			sc.nextLine(); 
+
+			if (verifyOtp(userOtpGPay)) {
+				if (accountbalance < billAmount) {
+					System.out.println("Insufficient funds. Your account balance is $" + accountbalance);
+					System.out.println("You can only pay up to $" + accountbalance);
+				} else {
+					paymentsuccess = true;
+				}
+			} else {
+				System.out.println("Invalid OTP. Payment declined.");
+			}
+			break;
+
+		default:
+			System.out.println("Invalid payment method. Please try again.");
+			return;
+		}
+
+		if (paymentsuccess) {
+			c1.Billpaid = true;
+			c1.displaybill(true);
+		} else {
+			c1.displaybill(false);
+		}
+
+	}}
